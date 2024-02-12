@@ -1,11 +1,21 @@
-import { Card, Button, Checkbox, Form, Input } from "antd"
+import { Card, Button, Checkbox, Form, Input, message } from "antd"
 import logo from '@/assets/logo.jpg'
 import "./index.scss"
+import { useStore } from "@/store"
+import { useNavigate } from "react-router-dom"
 function Login () {
+  //useStore返回的根Store实例对象中包含组件Store实例对象
+  const { loginStore } = useStore()
+  const navigate = useNavigate()
   //收集表单所有数据
-  function onFinish (values) {
-    // console.log(values)
-
+  async function onFinish (values) {
+    console.log(values)
+    await loginStore.getToken({
+      mobile: values.account,
+      code: values.password
+    })
+    navigate('/', { replace: true })
+    message.success('Login successfully!')
   }
   function onFinishFailed (errors) {
     // console.log(errors)
